@@ -5,6 +5,7 @@ import com.example.wx.msg.event.InSubscribeEvent;
 import com.example.wx.msg.in.InImageMsg;
 import com.example.wx.msg.in.InLinkMsg;
 import com.example.wx.msg.in.InTextMsg;
+import com.example.wx.msg.out.OutImgMsg;
 import com.example.wx.msg.out.OutMsg;
 import com.example.wx.msg.out.OutTextMsg;
 
@@ -13,7 +14,6 @@ public class DefaultHandler extends MsgHandler{
     @Override
     protected OutMsg handlerTextMsg(InTextMsg inTextMsg) {
         OutTextMsg outTextMsg = new OutTextMsg(inTextMsg);
-        outTextMsg.setMsgType(MsgTypes.TEXT.getType());
         outTextMsg.setContent("感谢您的留言，欢迎提供更好的意见或建议");
         return outTextMsg;
     }
@@ -25,6 +25,8 @@ public class DefaultHandler extends MsgHandler{
 
     @Override
     protected OutMsg handlerImageMsg(InImageMsg inImageMsg) {
+        OutImgMsg outImgMsg=new OutImgMsg(inImageMsg);
+        outImgMsg.setMediaId(inImageMsg.getMediaId());
         return null;
     }
 

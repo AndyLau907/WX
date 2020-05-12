@@ -1,14 +1,16 @@
 package com.example.wx.msg.out;
 
 
+import com.example.wx.handler.MsgTypes;
 import com.example.wx.msg.in.InMsg;
 
-public class OutTextMsg extends OutMsg{
+public class OutTextMsg extends OutMsg {
 
     private String content;
 
     public OutTextMsg(InMsg inMsg) {
         super(inMsg);
+        this.setMsgType(MsgTypes.TEXT.getType());
     }
 
     public String getContent() {
