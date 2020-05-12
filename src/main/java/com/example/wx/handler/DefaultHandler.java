@@ -27,7 +27,7 @@ public class DefaultHandler extends MsgHandler{
     protected OutMsg handlerImageMsg(InImageMsg inImageMsg) {
         OutImgMsg outImgMsg=new OutImgMsg(inImageMsg);
         outImgMsg.setMediaId(inImageMsg.getMediaId());
-        return null;
+        return outImgMsg;
     }
 
     @Override

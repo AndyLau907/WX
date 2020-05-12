@@ -15,7 +15,6 @@ public abstract class MsgHandler {
     public String handler(Map<String, String> map) {
 
         String msgType = map.get("MsgType");
-        System.out.println("msgType=="+msgType);
         OutMsg outMsg = null;
         if (msgType.equals(MsgTypes.TEXT.getType())) {
             InTextMsg inTextMsg = new InTextMsg(map);
