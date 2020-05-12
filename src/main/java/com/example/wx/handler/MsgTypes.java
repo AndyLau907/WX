@@ -5,7 +5,8 @@ public enum MsgTypes {
     TEXT("text"),
     IMAGE("image"),
     LINK("link"),
-    EVENT("event");
+    EVENT("event"),
+    ARTICLE("news");
 
     private String type;
 

@@ -5,16 +5,38 @@ import com.example.wx.msg.event.InSubscribeEvent;
 import com.example.wx.msg.in.InImageMsg;
 import com.example.wx.msg.in.InLinkMsg;
 import com.example.wx.msg.in.InTextMsg;
+import com.example.wx.msg.out.OutArticleMsg;
 import com.example.wx.msg.out.OutImgMsg;
 import com.example.wx.msg.out.OutMsg;
 import com.example.wx.msg.out.OutTextMsg;
 
-public class DefaultHandler extends MsgHandler{
+public class DefaultHandler extends MsgHandler {
 
     @Override
     protected OutMsg handlerTextMsg(InTextMsg inTextMsg) {
         OutTextMsg outTextMsg = new OutTextMsg(inTextMsg);
-        outTextMsg.setContent("感谢您的留言，欢迎提供更好的意见或建议。（请勿反复回消息噢~因为我只是自动回复啦~）");
+        String content = inTextMsg.getContent().replaceAll(" ", "");
+        if (content.equals("1")) {
+            //回复商品信息图文消息
+            OutArticleMsg articleMsg=new OutArticleMsg(inTextMsg);
+            articleMsg.setTitle("本店商品大合集~快来看看吧");
+            articleMsg.setDescription("");
+            articleMsg.setPicurl("https://www.baidu.com");
+            return articleMsg;
+        } else if (content.equals("2")) {
+            //回复联系方式 文本消息
+            outTextMsg.setContent("1.");
+        } else if (content.equals("3")) {
+            //回复淘宝链接 文本消息
+            outTextMsg.setContent("待定");
+        } else {
+            outTextMsg.setContent("~~成都源林花卉期待您的光临~~！\n" +
+                    "回复选项选择功能：\n" +
+                    "1.商品信息展示\n" +
+                    "2.联系我们\n" +
+                    "3.线上店铺\n");
+        }
+
         return outTextMsg;
     }
 
@@ -25,7 +47,7 @@ public class DefaultHandler extends MsgHandler{
 
     @Override
     protected OutMsg handlerImageMsg(InImageMsg inImageMsg) {
-        OutImgMsg outImgMsg=new OutImgMsg(inImageMsg);
+        OutImgMsg outImgMsg = new OutImgMsg(inImageMsg);
         outImgMsg.setMediaId(inImageMsg.getMediaId());
         return outImgMsg;
     }
@@ -54,7 +76,11 @@ public class DefaultHandler extends MsgHandler{
 
         OutTextMsg outTextMsg = new OutTextMsg(inSubscribeEvent);
         outTextMsg.setMsgType(MsgTypes.TEXT.getType());
-        outTextMsg.setContent("感谢您的关注,成都源林花卉期待您的光临！");
+        outTextMsg.setContent("感谢您的关注,成都源林花卉期待您的光临！\n" +
+                "回复选项选择功能：\n" +
+                "1.商品信息展示\n" +
+                "2.联系我们\n" +
+                "3.线上店铺\n");
         return outTextMsg;
     }
 }

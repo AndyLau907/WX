@@ -1,9 +1,10 @@
 package com.example.wx.msg.out;
 
 
+import com.example.wx.handler.MsgTypes;
 import com.example.wx.msg.in.InMsg;
 
-public class OutArticleMsg extends OutMsg{
+public class OutArticleMsg extends OutMsg {
 
     private String title;
     private String description;
@@ -12,6 +13,7 @@ public class OutArticleMsg extends OutMsg{
 
     public OutArticleMsg(InMsg inMsg) {
         super(inMsg);
+        this.msgType = MsgTypes.ARTICLE.getType();
     }
 
     @Override
@@ -38,7 +40,7 @@ public class OutArticleMsg extends OutMsg{
                 .replace("title", title)
                 .replace("description", description)
                 .replace("picurl", picurl)
-                .replace("url", url);
+                .replace("url", picurl);
         return xmlStr;
     }
 
