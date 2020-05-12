@@ -24,8 +24,6 @@ public class AccessTokenApi {
         ObjectMapper objectMapper = new ObjectMapper();
 
         Map map = objectMapper.readValue(result, HashMap.class);
-        String value1 = (String)map.get("access_token");
-        int value2 = (Integer)map.get("expires_in");
         AccessToken accessToken = new AccessToken((String)map.get("access_token"), (Integer) map.get("expires_in"));
 
         return accessToken;

@@ -27,7 +27,7 @@ public class OutImgMsg extends OutMsg {
                 .replace("fromUser", fromUserName)
                 .replace("createTime", createTime)
                 .replace("msgType", msgType)
-                .replace("MediaId", mediaId);
+                .replace("media_id", mediaId);
         return xmlStr;
     }
 
