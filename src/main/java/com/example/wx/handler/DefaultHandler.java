@@ -14,7 +14,7 @@ public class DefaultHandler extends MsgHandler{
     @Override
     protected OutMsg handlerTextMsg(InTextMsg inTextMsg) {
         OutTextMsg outTextMsg = new OutTextMsg(inTextMsg);
-        outTextMsg.setContent("感谢您的留言，欢迎提供更好的意见或建议");
+        outTextMsg.setContent("感谢您的留言，欢迎提供更好的意见或建议。（请勿反复回消息噢~因为我只是自动回复啦~）");
         return outTextMsg;
     }
 
@@ -54,7 +54,7 @@ public class DefaultHandler extends MsgHandler{
 
         OutTextMsg outTextMsg = new OutTextMsg(inSubscribeEvent);
         outTextMsg.setMsgType(MsgTypes.TEXT.getType());
-        outTextMsg.setContent("感谢您的关注");
+        outTextMsg.setContent("感谢您的关注,成都源林花卉期待您的光临！");
         return outTextMsg;
     }
 }

@@ -3,11 +3,10 @@ package com.example.wx.Controller;
 import com.example.wx.Utils.SignUtil;
 import com.example.wx.Utils.XMLUtil;
 import com.example.wx.handler.DefaultHandler;
+import com.example.wx.view.MenuManager;
 import org.dom4j.DocumentException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,4 +39,16 @@ public class WXController {
         out.println(msg);
         out.close();
     }
+
+    @GetMapping("createMenu")
+    @ResponseBody
+    public String createMenu() {
+        try {
+            return MenuManager.createMenu();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Exception";
+        }
+    }
+
 }
