@@ -29,7 +29,7 @@ public class WXController {
         throw new RuntimeException("非法请求");
     }
 
-    @PostMapping("system")
+    @PostMapping("check")
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, DocumentException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
