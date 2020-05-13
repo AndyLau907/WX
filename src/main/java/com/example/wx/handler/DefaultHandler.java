@@ -21,8 +21,8 @@ public class DefaultHandler extends MsgHandler {
             //回复商品信息图文消息
             articleMsg.setTitle("本店商品大合集~快来看看吧");
             articleMsg.setDescription("");
-            articleMsg.setUrl("cdylhh.club/WX/index.html");
-            articleMsg.setPicurl("cdylhh.club/WX/index.html");
+            articleMsg.setUrl("http://http://119.45.120.159/WX/index.html");
+            articleMsg.setPicurl("http://http://119.45.120.159/WX/index.html");
             return articleMsg;
         } else if (content.equals("2")) {
             //回复联系方式 文本消息
