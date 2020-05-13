@@ -42,7 +42,11 @@ public class WXController {
         out.println(msg);
         out.close();
     }
-
+    @GetMapping("getGoods")
+    @ResponseBody
+    public String getGoods() {
+        return "sssssssssssssssssssss";
+    }
     @GetMapping("get")
     @ResponseBody
     public String getImages() {
