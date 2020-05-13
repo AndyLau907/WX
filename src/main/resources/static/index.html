@@ -6,50 +6,21 @@
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <link rel="stylesheet"
           href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <title>商品列表</title>
+    <title>源林花卉</title>
     <script type="text/javascript">
         $.ajax({
             type: "GET",
             url: "http://119.45.120.159/WX/getGoods",
             success: function (res) {
-                res.
+                document.getElementById("list").innerHTML=res;
             }
         });
     </script>
 </head>
 <body>
-<h1 class="text-center text-primary">商品列表</h1>
-<ol class="list-group">
-    <li class="list-group-item active">
-        <h4 class="list-group-item-heading">
-            入门网站包
-        </h4>
-    </li>
-    <li class="list-group-item">
-        <img src="./images/timg.jpg" height="300px" width="80%">
-        <p class="list-group-item-text">
-            图片简介图片简介图片简介图片简介图片简介图片简介图片简介
-        </p>
-    </li>
-</ol>
-<ol class="list-group">
-    <li class="list-group-item active">
-        <h4 class="list-group-item-heading">
-            商务网站包
-        </h4>
-    </li>
-    <li class="list-group-item">
-        <h4 class="list-group-item-heading">
-            免费域名注册
-        </h4>
-        <p class="list-group-item-text">
-            您将通过网页进行免费域名注册。
-        </p>
-    </li>
-    <li class="list-group-item">
-        <h4 class="list-group-item-heading">24*7 支持</h4>
-        <p class="list-group-item-text">我们提供 24*7 支持。</p>
-    </li>
+<h2 class="text-center text-primary">商品列表</h2>
+<ol id='list' class="list-group">
+
 </ol>
 </body>
 </html>
