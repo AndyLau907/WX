@@ -1,12 +1,13 @@
 package com.example.wx.bean;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class AccessToken {
 
     String accessToken;
     int expiresIn;
-    Date date;
+    Date date;//过期时间
 
     public AccessToken() {
     }
@@ -14,7 +15,10 @@ public class AccessToken {
     public AccessToken(String accessToken, int expiresIn) {
         this.accessToken = accessToken;
         this.expiresIn = expiresIn;
-        this.date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.SECOND, expiresIn);
+        this.date = calendar.getTime();
     }
 
     public String getAccessToken() {
@@ -31,5 +35,13 @@ public class AccessToken {
 
     public void setExpiresIn(int expiresIn) {
         this.expiresIn = expiresIn;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
