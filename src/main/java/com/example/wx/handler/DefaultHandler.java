@@ -5,30 +5,35 @@ import com.example.wx.msg.event.InSubscribeEvent;
 import com.example.wx.msg.in.InImageMsg;
 import com.example.wx.msg.in.InLinkMsg;
 import com.example.wx.msg.in.InTextMsg;
-import com.example.wx.msg.out.*;
+import com.example.wx.msg.out.OutArticleMsg;
+import com.example.wx.msg.out.OutImgMsg;
+import com.example.wx.msg.out.OutMsg;
+import com.example.wx.msg.out.OutTextMsg;
 
 public class DefaultHandler extends MsgHandler {
 
     @Override
     protected OutMsg handlerTextMsg(InTextMsg inTextMsg) {
         OutTextMsg outTextMsg = new OutTextMsg(inTextMsg);
-        OutLinkMsg linkMsg = new OutLinkMsg(inTextMsg);
+        OutArticleMsg articleMsg = new OutArticleMsg(inTextMsg);
         String content = inTextMsg.getContent().replaceAll(" ", "");
         if (content.equals("1")) {
-            //回复商品信息链接消息
-            linkMsg.setTitle("本店商品大合集~快来看看吧");
-            linkMsg.setDescription("");
-            linkMsg.setUrl("http://119.45.120.159/WX/index.html");
-            return linkMsg;
+            //回复商品信息图文消息
+            articleMsg.setTitle("本店商品大合集~快来看看吧");
+            articleMsg.setDescription("");
+            articleMsg.setUrl("https://www.baidu.com");
+            articleMsg.setPicurl("http://mmbiz.qpic.cn/mmbiz_jpg/hahnHJNLMuLVKhHzphfZG7ia4Y69vbKSibJsQZNEys9k6mmhhGolGmrF2eVmfVd8DFZIPWGh2YvuDcOtq6ZukY0w/0?wx_fmt=jpeg");
+            return articleMsg;
         } else if (content.equals("2")) {
             //回复联系方式 文本消息
             outTextMsg.setContent("1.");
         } else if (content.equals("3")) {
             //回复淘宝链接 图文消息
-            linkMsg.setTitle("淘宝店铺来啦~");
-            linkMsg.setDescription("");
-            linkMsg.setUrl("https://www.baidu.com");
-            return linkMsg;
+            articleMsg.setTitle("淘宝店铺");
+            articleMsg.setDescription("");
+            articleMsg.setUrl("https://www.baidu.com");
+            articleMsg.setPicurl("https://www.baidu.com");
+            return articleMsg;
         } else {
             outTextMsg.setContent("~~成都源林花卉期待您的光临~~！\n" +
                     "------------------------------\n" +
