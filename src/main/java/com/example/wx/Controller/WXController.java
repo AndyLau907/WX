@@ -46,7 +46,7 @@ public class WXController {
     @GetMapping("get")
     @ResponseBody
     public String getImages() {
-        String url="POST https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=ACCESS_TOKEN";
+        String url="https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=ACCESS_TOKEN";
         JSONObject json=new JSONObject();
         try {
             json.put("type","image");
