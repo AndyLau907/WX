@@ -26,11 +26,12 @@ public class DefaultHandler extends MsgHandler {
             return articleMsg;
         } else if (content.equals("2")) {
             //回复联系方式 文本消息
-            outTextMsg.setContent("1.");
+            outTextMsg.setContent("暂时没有情报啊~~");
+            return outTextMsg;
         } else if (content.equals("3")) {
             //回复淘宝链接 图文消息
             articleMsg.setTitle("淘宝店铺");
-            articleMsg.setDescription("");
+            articleMsg.setDescription("暂时没有情报啊~只能给你百度了~");
             articleMsg.setUrl("https://www.baidu.com");
             articleMsg.setPicurl("https://www.baidu.com");
             return articleMsg;
