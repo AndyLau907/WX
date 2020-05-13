@@ -21,8 +21,8 @@ public class DefaultHandler extends MsgHandler {
             //回复商品信息图文消息
             articleMsg.setTitle("本店商品大合集~快来看看吧");
             articleMsg.setDescription("");
-            articleMsg.setUrl("https://www.baidu.com");
-            articleMsg.setPicurl("https://www.baidu.com");
+            articleMsg.setUrl("http://119.45.120.159/WX/index.html");
+            articleMsg.setPicurl("http://mmbiz.qpic.cn/mmbiz_jpg/hahnHJNLMuLVKhHzphfZG7ia4Y69vbKSibJsQZNEys9k6mmhhGolGmrF2eVmfVd8DFZIPWGh2YvuDcOtq6ZukY0w/0?wx_fmt=jpeg");
             return articleMsg;
         } else if (content.equals("2")) {
             //回复联系方式 文本消息
