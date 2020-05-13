@@ -15,26 +15,32 @@ public class DefaultHandler extends MsgHandler {
     @Override
     protected OutMsg handlerTextMsg(InTextMsg inTextMsg) {
         OutTextMsg outTextMsg = new OutTextMsg(inTextMsg);
+        OutArticleMsg articleMsg = new OutArticleMsg(inTextMsg);
         String content = inTextMsg.getContent().replaceAll(" ", "");
         if (content.equals("1")) {
             //回复商品信息图文消息
-            OutArticleMsg articleMsg=new OutArticleMsg(inTextMsg);
             articleMsg.setTitle("本店商品大合集~快来看看吧");
             articleMsg.setDescription("");
+            articleMsg.setUrl("https://www.baidu.com");
             articleMsg.setPicurl("https://www.baidu.com");
             return articleMsg;
         } else if (content.equals("2")) {
             //回复联系方式 文本消息
             outTextMsg.setContent("1.");
         } else if (content.equals("3")) {
-            //回复淘宝链接 文本消息
-            outTextMsg.setContent("待定");
+            //回复淘宝链接 图文消息
+            articleMsg.setTitle("淘宝店铺来啦~");
+            articleMsg.setDescription("");
+            articleMsg.setUrl("https://www.baidu.com");
+            articleMsg.setPicurl("https://www.baidu.com");
+            return articleMsg;
         } else {
             outTextMsg.setContent("~~成都源林花卉期待您的光临~~！\n" +
-                    "回复选项选择功能：\n" +
+                    "------------------------------\n" +
                     "1.商品信息展示\n" +
                     "2.联系我们\n" +
-                    "3.线上店铺\n");
+                    "3.线上店铺\n" +
+                    "回复以上选项选择功能\n");
         }
 
         return outTextMsg;

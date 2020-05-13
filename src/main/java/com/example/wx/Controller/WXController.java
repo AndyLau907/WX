@@ -1,11 +1,14 @@
 package com.example.wx.Controller;
 
+import com.example.wx.Utils.ResponseUtil;
 import com.example.wx.Utils.SignUtil;
 import com.example.wx.Utils.XMLUtil;
+import com.example.wx.api.AccessTokenApi;
+import com.example.wx.api.IdAndSecretApi;
 import com.example.wx.handler.DefaultHandler;
-import com.example.wx.view.MenuManager;
 import org.dom4j.DocumentException;
-import org.springframework.http.HttpEntity;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,15 +43,25 @@ public class WXController {
         out.close();
     }
 
-    @GetMapping("createMenu")
+    @GetMapping("get")
     @ResponseBody
-    public String createMenu() {
+    public String getImages() {
+        String url="POST https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=ACCESS_TOKEN";
+        JSONObject json=new JSONObject();
         try {
-            return MenuManager.createMenu();
+            json.put("type","image");
+            json.put("offset",0);
+            json.put("count","20");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            url.replaceAll("ACCESS_TOKEN",AccessTokenApi.getAccessToken(IdAndSecretApi.appID,IdAndSecretApi.appSecret).getAccessToken());
+            return ResponseUtil.sendPost(url,json.toString());
         } catch (IOException e) {
             e.printStackTrace();
-            return "Exception";
         }
+        return "failed";
     }
 
 }
