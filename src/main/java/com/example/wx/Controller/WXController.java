@@ -56,7 +56,7 @@ public class WXController {
             e.printStackTrace();
         }
         try {
-            url.replaceAll("ACCESS_TOKEN",AccessTokenApi.getAccessToken(IdAndSecretApi.appID,IdAndSecretApi.appSecret).getAccessToken());
+            url=url.replaceAll("ACCESS_TOKEN",AccessTokenApi.getAccessToken(IdAndSecretApi.appID,IdAndSecretApi.appSecret).getAccessToken());
             return ResponseUtil.sendPost(url,json.toString());
         } catch (IOException e) {
             e.printStackTrace();
