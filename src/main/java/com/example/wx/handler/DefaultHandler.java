@@ -37,7 +37,7 @@ public class DefaultHandler extends MsgHandler {
             return articleMsg;
         } else {
             outTextMsg.setContent("~~成都源林花卉期待您的光临~~！\n" +
-                    "------------------------------\n" +
+                    "----------------------------------------\n" +
                     "1.商品信息展示\n" +
                     "2.联系我们\n" +
                     "3.线上店铺\n" +
@@ -84,7 +84,7 @@ public class DefaultHandler extends MsgHandler {
         OutTextMsg outTextMsg = new OutTextMsg(inSubscribeEvent);
         outTextMsg.setMsgType(MsgTypes.TEXT.getType());
         outTextMsg.setContent("感谢您的关注,成都源林花卉期待您的光临！\n" +
-                "回复选项选择功能：\n" +
+                "----------------------------------------\n" +
                 "1.商品信息展示\n" +
                 "2.联系我们\n" +
                 "3.线上店铺\n" +

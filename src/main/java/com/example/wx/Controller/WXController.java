@@ -5,8 +5,11 @@ import com.example.wx.Utils.SignUtil;
 import com.example.wx.Utils.XMLUtil;
 import com.example.wx.api.AccessTokenApi;
 import com.example.wx.api.IdAndSecretApi;
+import com.example.wx.bean.WxGoodsInfo;
 import com.example.wx.handler.DefaultHandler;
+import com.example.wx.repository.WxGoodsInfoRepository;
 import org.dom4j.DocumentException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +18,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 public class WXController {
+
+    @Autowired
+    WxGoodsInfoRepository repository;
 
     @GetMapping(value = "check")
     public String getUserName(@RequestParam(name = "signature") String signature,
@@ -46,31 +55,46 @@ public class WXController {
     @GetMapping("getGoods")
     @ResponseBody
     public String getGoods() {
+        List<WxGoodsInfo> list = repository.findAllByOOrderByCreateTimeDesc();
         String temp = "<li class=\"list-group-item active\">\n" +
-                "        <h4 class=\"list-group-item-heading\">\n" +
-                "            ItemTitle\n" +
-                "        </h4>\n" +
-                "    </li>\n" +
-                "    <li class=\"list-group-item\">\n" +
-                "        <img src=\"ImgSrc\" height=\"250px\" width=\"100%\">\n" +
-                "        <p class=\"list-group-item-text\">\n" +
-                "            ItemDesc\n" +
-                "        </p>\n" +
-                "    </li>";
-        String desc = "Java是一门面向对象编程语言，不仅吸收了C++语言的各种优点，" +
-                "还摒弃了C++里难以理解的多继承、指针等概念，因此Java语言具有功能强大和简单易用两个特征。" +
-                "Java语言作为静态面向对象编程语言的代表，极好地实现了面向对象理论，允许程序员以优雅的思维方式进行复杂的编程";
-        String title = "Java";
-        String price = "100-200元";
-        String path = "./images/img#.jpg";
+                "    <h4 class=\"list-group-item-heading\">\n" +
+                "        ItemTitle\n" +
+                "       <small>MinPrice-MaxPrice元</small>\n" +
+                "           NEW\n" +
+                "    </h4>\n" +
+                "</li>\n" +
+                "<li class=\"list-group-item\">\n" +
+                "    <img src=\"ImgSrc\" height=\"250px\" width=\"100%\">\n" +
+                "    <p class=\"list-group-item-text\">\n" +
+                "        ItemDesc\n" +
+                "    </p>\n" +
+                "</li>\n";
+        String temp2 = "<span class=\"label label-danger\">新</span>";
         StringBuilder stringBuilder = new StringBuilder();
+        String s;
+        Date now = new Date();
+        Date exDate;
+        for (WxGoodsInfo wxGoodsInfo : list) {
+            s = temp.replace("ItemTitle", wxGoodsInfo.getGoodsName());
+            if (wxGoodsInfo.getMaxPrice() == null || wxGoodsInfo.getMinPrice() == null) {
+                s = s.replace("MinPrice-MaxPrice元", "面议");
+            } else {
+                s = s.replace("MinPrice", wxGoodsInfo.getMinPrice().toString())
+                        .replace("MaxPrice", wxGoodsInfo.getMaxPrice().toString());
+            }
+            Calendar c = Calendar.getInstance();
+            c.setTime(wxGoodsInfo.getCreateTime());
+            c.add(Calendar.DAY_OF_MONTH, 30);
+            exDate = c.getTime();
 
-        for (int i = 0; i < 7; i++) {
-            stringBuilder.append(temp.replace("ItemTitle", title + "-" + price)
-                    .replace("ImgSrc", path.replace("#", (i + 1) + ""))
-                    .replace("ItemDesc", desc));
-            stringBuilder.append("\n");
+            if (exDate.before(now)) {
+                s = s.replace("NEW", temp2);
+            }
+            s = s.replace("ImgSrc", wxGoodsInfo.getFilePath())
+                    .replace("ItemDesc", wxGoodsInfo.getRemark());
+            stringBuilder.append(s);
         }
+
         return stringBuilder.toString();
     }
 
