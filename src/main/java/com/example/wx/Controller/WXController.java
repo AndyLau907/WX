@@ -59,7 +59,7 @@ public class WXController {
         String temp = "<li class=\"list-group-item active\">\n" +
                 "    <h4 class=\"list-group-item-heading\">\n" +
                 "        ItemTitle\n" +
-                "       <small>MinPrice-MaxPrice元</small>\n" +
+                "       <small>MinPrice----MaxPrice 元</small>\n" +
                 "           NEW\n" +
                 "    </h4>\n" +
                 "</li>\n" +
@@ -77,7 +77,7 @@ public class WXController {
         for (WxGoodsInfo wxGoodsInfo : list) {
             s = temp.replace("ItemTitle", wxGoodsInfo.getGoodsName());
             if (wxGoodsInfo.getMaxPrice() == null || wxGoodsInfo.getMinPrice() == null) {
-                s = s.replace("MinPrice-MaxPrice元", "面议");
+                s = s.replace("MinPrice----MaxPrice 元", "面议");
             } else {
                 s = s.replace("MinPrice", wxGoodsInfo.getMinPrice().toString())
                         .replace("MaxPrice", wxGoodsInfo.getMaxPrice().toString());
