@@ -38,13 +38,13 @@ public class DefaultHandler extends MsgHandler {
             return articleMsg;*/
             outTextMsg.setContent("/::$淘宝店铺装修中~敬请期待。");
         } else {
-            outTextMsg.setContent("/:rose/:rose成都源林花卉期待您的光临/:rose/:rose！\n" +
-                    "/:rose/:rose地址:四川省-成都市-双流区-城南花市B区4-5号/:rose/:rose\n"+
-                    "----------------------------------------\n" +
-                    "♣♣1.商品信息展示♣♣\n" +
-                    "♣♣2.联系我们♣♣\n" +
-                    "♣♣3.线上店铺♣♣\n" +
-                    "♣♣回复以上选项选择功能♣♣\n");
+            outTextMsg.setContent("/:rose成都源林花卉期待您的光临！\n" +
+                    "/:rose地址:四川省-成都市-双流区-城南花市B区4-5号\n"+
+                    "--------------------------------------------\n" +
+                    "/:rose1.商品信息展示\n" +
+                    "/:rose2.联系我们\n" +
+                    "/:rose3.线上店铺\n" +
+                    "/:rose回复以上选项选择功能\n");
         }
 
         return outTextMsg;
@@ -85,14 +85,13 @@ public class DefaultHandler extends MsgHandler {
     protected OutMsg handlerSubscribeEvent(InSubscribeEvent inSubscribeEvent) {
 
         OutTextMsg outTextMsg = new OutTextMsg(inSubscribeEvent);
-        outTextMsg.setMsgType(MsgTypes.TEXT.getType());
-        outTextMsg.setContent("/:rose/:rose感谢您的关注,成都源林花卉期待您的光临/:rose/:rose！\n" +
-                "/:rose/:rose地址:四川省-成都市-双流区-城南花市B区4-5号/:rose/:rose\n"+
-                "----------------------------------------\n" +
-                "♣♣1.商品信息展示♣♣\n" +
-                "♣♣2.联系我们♣♣\n" +
-                "♣♣3.线上店铺♣♣\n" +
-                "♣♣回复以上选项选择功能♣♣\n");
+        outTextMsg.setContent("/:rose感谢您的关注，成都源林花卉期待您的光临！\n" +
+                "/:rose地址:四川省-成都市-双流区-城南花市B区4-5号\n"+
+                "--------------------------------------------\n" +
+                "/:rose1.商品信息展示\n" +
+                "/:rose2.联系我们\n" +
+                "/:rose3.线上店铺\n" +
+                "/:rose回复以上选项选择功能\n");
         return outTextMsg;
     }
 }
