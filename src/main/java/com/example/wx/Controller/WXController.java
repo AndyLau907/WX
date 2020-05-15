@@ -87,8 +87,10 @@ public class WXController {
             c.add(Calendar.DAY_OF_MONTH, 30);
             exDate = c.getTime();
 
-            if (exDate.before(now)) {
+            if (exDate.after(now)) {
                 s = s.replace("NEW", temp2);
+            }else{
+                s=s.replace("NEW","");
             }
             s = s.replace("ImgSrc", wxGoodsInfo.getFilePath())
                     .replace("ItemDesc", wxGoodsInfo.getRemark());
