@@ -64,7 +64,7 @@ public class WXController {
                 "    </h4>\n" +
                 "</li>\n" +
                 "<li class=\"list-group-item\">\n" +
-                "    <img src=\"ImgSrc\" height=\"50vh\" width=\"80vw\">\n" +
+                "    <img src=\"ImgSrc\"  width=\"100%\">\n" +
                 "    <p class=\"list-group-item-text\">\n" +
                 "        ItemDesc\n" +
                 "    </p>\n" +
