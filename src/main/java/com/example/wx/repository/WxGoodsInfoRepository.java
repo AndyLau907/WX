@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface WxGoodsInfoRepository extends JpaRepository<WxGoodsInfo, String> {
 
-    List<WxGoodsInfo> findAllByOOrderByCreateTimeDesc();
+    List<WxGoodsInfo> findAllByOrderByCreateTimeDesc();
 }

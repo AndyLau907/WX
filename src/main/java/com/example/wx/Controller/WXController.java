@@ -55,7 +55,7 @@ public class WXController {
     @GetMapping("getGoods")
     @ResponseBody
     public String getGoods() {
-        List<WxGoodsInfo> list = repository.findAllByOOrderByCreateTimeDesc();
+        List<WxGoodsInfo> list = repository.findAllByOrderByCreateTimeDesc();
         String temp = "<li class=\"list-group-item active\">\n" +
                 "    <h4 class=\"list-group-item-heading\">\n" +
                 "        ItemTitle\n" +
