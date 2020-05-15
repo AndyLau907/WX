@@ -26,22 +26,25 @@ public class DefaultHandler extends MsgHandler {
             return articleMsg;
         } else if (content.equals("2")) {
             //回复联系方式 文本消息
-            outTextMsg.setContent("暂时没有情报啊~~");
+            outTextMsg.setContent("/:8-)13540318051罗先生");
             return outTextMsg;
         } else if (content.equals("3")) {
             //回复淘宝链接 图文消息
+            /*
             articleMsg.setTitle("淘宝店铺");
             articleMsg.setDescription("暂时没有情报啊~只能给你百度了~");
             articleMsg.setUrl("https://www.baidu.com");
             articleMsg.setPicurl("https://www.baidu.com");
-            return articleMsg;
+            return articleMsg;*/
+            outTextMsg.setContent("/::$淘宝店铺装修中~敬请期待。");
         } else {
-            outTextMsg.setContent("~~成都源林花卉期待您的光临~~！\n" +
+            outTextMsg.setContent("/:rose/:rose成都源林花卉期待您的光临/:rose/:rose！\n" +
+                    "/:rose/:rose地址:四川省-成都市-双流区-城南花市B区4-5号/:rose/:rose\n"+
                     "----------------------------------------\n" +
-                    "1.商品信息展示\n" +
-                    "2.联系我们\n" +
-                    "3.线上店铺\n" +
-                    "回复以上选项选择功能\n");
+                    "♣♣1.商品信息展示♣♣\n" +
+                    "♣♣2.联系我们♣♣\n" +
+                    "♣♣3.线上店铺♣♣\n" +
+                    "♣♣回复以上选项选择功能♣♣\n");
         }
 
         return outTextMsg;
@@ -83,12 +86,13 @@ public class DefaultHandler extends MsgHandler {
 
         OutTextMsg outTextMsg = new OutTextMsg(inSubscribeEvent);
         outTextMsg.setMsgType(MsgTypes.TEXT.getType());
-        outTextMsg.setContent("感谢您的关注,成都源林花卉期待您的光临！\n" +
+        outTextMsg.setContent("/:rose/:rose感谢您的关注,成都源林花卉期待您的光临/:rose/:rose！\n" +
+                "/:rose/:rose地址:四川省-成都市-双流区-城南花市B区4-5号/:rose/:rose\n"+
                 "----------------------------------------\n" +
-                "1.商品信息展示\n" +
-                "2.联系我们\n" +
-                "3.线上店铺\n" +
-                "回复以上选项选择功能\n");
+                "♣♣1.商品信息展示♣♣\n" +
+                "♣♣2.联系我们♣♣\n" +
+                "♣♣3.线上店铺♣♣\n" +
+                "♣♣回复以上选项选择功能♣♣\n");
         return outTextMsg;
     }
 }
