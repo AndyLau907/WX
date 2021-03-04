@@ -51,8 +51,8 @@ public class WXController {
     @PostMapping("test")
     public String Test(@RequestBody HashMap map) throws JSONException {
         JSONObject jsonObject=new JSONObject();
-        jsonObject.put("sss","sdasd");
-        jsonObject.put("sadas","asdasdasd");
+        jsonObject.put("sss",map.get("s"));
+        jsonObject.put("sadas",map.get("b"));
 
         return jsonObject.toString();
     }
