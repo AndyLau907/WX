@@ -18,10 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class WXController {
@@ -51,7 +48,10 @@ public class WXController {
         out.println(msg);
         out.close();
     }
-
+    @PostMapping("test")
+    public String Test(@RequestBody HashMap map){
+        return "665";
+    }
     @GetMapping("getGoods")
     @ResponseBody
     public String getGoods() {
