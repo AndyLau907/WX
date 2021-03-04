@@ -49,8 +49,12 @@ public class WXController {
         out.close();
     }
     @PostMapping("test")
-    public String Test(@RequestBody HashMap map){
-        return "665";
+    public String Test(@RequestBody HashMap map) throws JSONException {
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("sss","sdasd");
+        jsonObject.put("sadas","asdasdasd");
+
+        return jsonObject.toString();
     }
     @GetMapping("getGoods")
     @ResponseBody
