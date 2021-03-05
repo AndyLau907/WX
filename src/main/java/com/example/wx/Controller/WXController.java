@@ -5,8 +5,11 @@ import com.example.wx.Utils.SignUtil;
 import com.example.wx.Utils.XMLUtil;
 import com.example.wx.api.AccessTokenApi;
 import com.example.wx.api.IdAndSecretApi;
+import com.example.wx.bean.Result;
+import com.example.wx.bean.User;
 import com.example.wx.bean.WxGoodsInfo;
 import com.example.wx.handler.DefaultHandler;
+import com.example.wx.repository.UserRepository;
 import com.example.wx.repository.WxGoodsInfoRepository;
 import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,8 @@ public class WXController {
 
     @Autowired
     WxGoodsInfoRepository repository;
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping(value = "check")
     public String getUserName(@RequestParam(name = "signature") String signature,
@@ -48,14 +53,49 @@ public class WXController {
         out.println(msg);
         out.close();
     }
-    @PostMapping("test")
-    public String Test(@RequestBody HashMap map) throws JSONException {
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.put("sss",map.get("s"));
-        jsonObject.put("sadas",map.get("b"));
 
-        return jsonObject.toString();
+    @PostMapping("Login")
+    public Result login(@RequestBody HashMap map) {
+        String userName = map.get("userName") == null ? "" : map.get("userName").toString();
+        String password = map.get("password") == null ? "" : map.get("password").toString();
+        Result result = new Result();
+        List<User> list = userRepository.findAllByUserNameAndPassword(userName, password);
+        if (list.isEmpty()) {
+            result.setValid(false);
+            result.setMessage("Login failed, account or password is wrong!");
+        } else {
+            result.setValid(true);
+            result.setMessage("Login successful!");
+            result.setData(list.get(0));
+        }
+        return result;
     }
+
+    @PostMapping("Register")
+    public Result register(@RequestBody HashMap map) {
+        String userName = map.get("userName") == null ? "" : map.get("userName").toString();
+        String password = map.get("password") == null ? "" : map.get("password").toString();
+        String phone = map.get("phone") == null ? "" : map.get("phone").toString();
+
+        Result result = new Result();
+        List<User> list = userRepository.findAllByUserName(userName);
+        if (!list.isEmpty()) {
+            result.setMessage("Registration failed, username already exists!");
+            result.setValid(false);
+            return result;
+        }
+        User user = new User();
+        user.setId(UUID.randomUUID().toString());
+        user.setPassword(password);
+        user.setPhone(phone);
+        user.setUserName(userName);
+        userRepository.save(user);
+        result.setValid(true);
+        result.setMessage("Registration success!");
+        result.setData(user);
+        return result;
+    }
+
     @GetMapping("getGoods")
     @ResponseBody
     public String getGoods() {
@@ -93,8 +133,8 @@ public class WXController {
 
             if (exDate.after(now)) {
                 s = s.replace("NEW", temp2);
-            }else{
-                s=s.replace("NEW","");
+            } else {
+                s = s.replace("NEW", "");
             }
             s = s.replace("ImgSrc", wxGoodsInfo.getFilePath())
                     .replace("ItemDesc", wxGoodsInfo.getRemark());
