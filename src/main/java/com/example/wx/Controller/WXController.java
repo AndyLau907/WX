@@ -85,7 +85,7 @@ public class WXController {
             return result;
         }
         User user = new User();
-        user.setId(UUID.randomUUID().toString());
+        user.setId(UUID.randomUUID().toString().replaceAll("-","").substring(15));
         user.setPassword(password);
         user.setPhone(phone);
         user.setUserName(userName);
