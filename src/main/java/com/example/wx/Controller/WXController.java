@@ -5,10 +5,10 @@ import com.example.wx.Utils.SignUtil;
 import com.example.wx.Utils.XMLUtil;
 import com.example.wx.api.AccessTokenApi;
 import com.example.wx.api.IdAndSecretApi;
-import com.example.wx.bean.Result;
-import com.example.wx.bean.User;
-import com.example.wx.bean.WxGoodsInfo;
+import com.example.wx.bean.*;
 import com.example.wx.handler.DefaultHandler;
+import com.example.wx.repository.SignRepository;
+import com.example.wx.repository.UserDataRepository;
 import com.example.wx.repository.UserRepository;
 import com.example.wx.repository.WxGoodsInfoRepository;
 import org.dom4j.DocumentException;
@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -30,6 +32,10 @@ public class WXController {
     WxGoodsInfoRepository repository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    SignRepository signRepository;
+    @Autowired
+    UserDataRepository userDataRepository;
 
     @GetMapping(value = "check")
     public String getUserName(@RequestParam(name = "signature") String signature,
@@ -62,7 +68,7 @@ public class WXController {
         List<User> list = userRepository.findAllByUserNameAndPassword(userName, password);
         if (list.isEmpty()) {
             result.setValid(false);
-            result.setMessage("Login failed, account or password is wrong!");
+            result.setMessage("Login failed, please check the network status or account and password!");
         } else {
             result.setValid(true);
             result.setMessage("Login successful!");
@@ -85,14 +91,117 @@ public class WXController {
             return result;
         }
         User user = new User();
-        user.setId(UUID.randomUUID().toString().replaceAll("-","").substring(15));
+        user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
         user.setPassword(password);
+        user.setGold(100);
         user.setPhone(phone);
         user.setUserName(userName);
         userRepository.save(user);
         result.setValid(true);
         result.setMessage("Registration success!");
         result.setData(user);
+        return result;
+    }
+
+    @PostMapping("Sign")
+    public Result sign(@RequestBody HashMap map) {
+        Result result = new Result();
+
+        String id = map.get("userId") == null ? "" : map.get("userId").toString();
+        String id2 = map.get("userDataId") == null ? "" : map.get("userDataId").toString();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        Date date = calendar.getTime();
+        List<Sign> list = signRepository.findAllBySignDateAndAndUserId(date, id);
+        if (!list.isEmpty()) {
+            result.setMessage("Signed in today, no need to sign again!");
+            result.setValid(false);
+            return result;
+        }
+        Sign sign = new Sign();
+        sign.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+        sign.setUserId(id);
+        sign.setUserDataId(id2);
+        sign.setSignDate(date);
+        signRepository.save(sign);
+
+        //更新金币
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setGold(user.getGold() + 10);
+            result.setValid(true);
+            result.setData(user);
+            result.setMessage("Sign in successfully");
+        }
+        return result;
+    }
+
+    @PostMapping("getPlan")
+    public Result getPlan(@RequestBody HashMap map) {
+        Result result = new Result();
+        String id = map.get("userId") == null ? "" : map.get("userId").toString();
+        List<UserData> list = userDataRepository.findAllByIsActiveAndUserId(1, id);
+        if (list.isEmpty()) {
+            result.setValid(false);
+        } else {
+            List<Sign> signList = signRepository.findAllByUserDataId(list.get(0).getId());
+            List<String> signDates = new ArrayList<>();
+            for (Sign sign : signList) {
+                Date d = sign.getSignDate();
+                Calendar c = Calendar.getInstance();
+                c.setTime(d);
+                signDates.add(c.get(Calendar.YEAR) + "." + (c.get(Calendar.MONTH) + 1) + "." + c.get(Calendar.DAY_OF_MONTH));
+            }
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.set(Calendar.HOUR, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            Date date = calendar.getTime();
+            List<Sign> temp = signRepository.findAllBySignDateAndAndUserId(date, id);
+            boolean isSigned = !temp.isEmpty();
+            HashMap<String, Object> data = new HashMap<>();
+            data.put("plan", list.get(0));
+            data.put("signDates", signDates);
+            data.put("isSigned", isSigned);
+            result.setData(data);
+            result.setValid(true);
+        }
+        return result;
+    }
+
+    @PostMapping("newPlan")
+    public Result newPlan(@RequestBody HashMap map) throws ParseException {
+        Result result = new Result();
+        String id = map.get("userId") == null ? "" : map.get("userId").toString();
+        String startDay = map.get("startDay") == null ? "" : map.get("startDay").toString();
+        String endDay = map.get("endDay") == null ? "" : map.get("endDay").toString();
+
+        List<UserData> list=userDataRepository.findAllByIsActiveAndUserId(1,id);
+        if(!list.isEmpty()){
+            result.setValid(false);
+            result.setMessage("You already have a plan, you can't create it again!");
+            return result;
+        }
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy.MM.dd");
+        Date startDate = sf.parse(startDay);
+        Date endDate = sf.parse(endDay);
+        int days = (int) (endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000);
+
+        UserData userData = new UserData();
+        userData.setDays(days);
+        userData.setEndDay(endDate);
+        userData.setStartDay(startDate);
+        userData.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+        userData.setUserId(id);
+        userData.setIsActive(1);
+        userDataRepository.save(userData);
+        result.setValid(true);
+        result.setMessage("Created successfully!");
         return result;
     }
 
