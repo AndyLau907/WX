@@ -1,7 +1,6 @@
 package com.example.wx.bean;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -10,7 +9,6 @@ import java.io.Serializable;
 @Table(name="USER")
 public class User implements Serializable {
     @Id
-    @GeneratedValue
     private String id;
 
     private String userName;
@@ -18,6 +16,8 @@ public class User implements Serializable {
     private String password;
 
     private String phone;
+
+    private int gold;
 
     public String getId() {
         return id;
@@ -49,5 +49,13 @@ public class User implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public int getGold() {
+        return gold;
+    }
+
+    public void setGold(int gold) {
+        this.gold = gold;
     }
 }
