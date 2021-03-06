@@ -165,7 +165,16 @@ public class WXController {
             List<Sign> temp = signRepository.findAllBySignDateAndAndUserId(date, id);
             boolean isSigned = !temp.isEmpty();
             HashMap<String, Object> data = new HashMap<>();
-            data.put("plan", list.get(0));
+            UserData ud=list.get(0);
+            UserDataViewModel model=new UserDataViewModel();
+            model.setUserId(ud.getUserId());
+            model.setId(ud.getId());
+            model.setEndDay(ud.getEndDay());
+            model.setStartDay(ud.getStartDay());
+            model.setIsActive(ud.getIsActive());
+            model.setDays(ud.getDays());
+            model.dateToStr();
+            data.put("plan", model);
             data.put("signDates", signDates);
             data.put("isSigned", isSigned);
             result.setData(data);
