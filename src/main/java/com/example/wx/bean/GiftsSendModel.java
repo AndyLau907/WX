@@ -1,5 +1,8 @@
 package com.example.wx.bean;
 
+import javax.persistence.Entity;
+
+@Entity
 public class GiftsSendModel {
     private String id;
     private String userName;
