@@ -19,6 +19,8 @@ public class User implements Serializable {
 
     private int gold;
 
+    private String address;
+
     public String getId() {
         return id;
     }
@@ -57,5 +59,13 @@ public class User implements Serializable {
 
     public void setGold(int gold) {
         this.gold = gold;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
