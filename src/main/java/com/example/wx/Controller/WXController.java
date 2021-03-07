@@ -37,6 +37,8 @@ public class WXController {
     SignRepository signRepository;
     @Autowired
     UserDataRepository userDataRepository;
+    @Autowired
+    EntityManager em;
     @GetMapping(value = "check")
     public String getUserName(@RequestParam(name = "signature") String signature,
                               @RequestParam(name = "timestamp") String timestamp,
@@ -118,7 +120,8 @@ public class WXController {
         int year=calendar.get(Calendar.YEAR);
         int month=calendar.get(Calendar.MONTH)+1;
         int day=calendar.get(Calendar.DAY_OF_MONTH);
-        List<Sign> list = signRepository.findAllBySignDateAndUserId(""+year+"-"+month+"-"+day, id);
+        String s=year+"-"+month+"-"+day;
+        List<Sign> list = em.createNativeQuery("select *from sign where user_id='"+id+"' and sign_date='"+s+"'",Sign.class).getResultList();
         if (!list.isEmpty()) {
             result.setMessage("Signed in today, no need to sign again!");
             result.setValid(false);
@@ -168,7 +171,8 @@ public class WXController {
             int year=calendar.get(Calendar.YEAR);
             int month=calendar.get(Calendar.MONTH)+1;
             int day=calendar.get(Calendar.DAY_OF_MONTH);
-            List<Sign> temp = signRepository.findAllBySignDateAndUserId(""+year+"-"+month+"-"+day, id);
+            String s=year+"-"+month+"-"+day;
+            List<Sign> temp = em.createNativeQuery("select *from sign where user_id='"+id+"' and sign_date='"+s+"'",Sign.class).getResultList();
             boolean isSigned = !temp.isEmpty();
             HashMap<String, Object> data = new HashMap<>();
             UserData ud=list.get(0);
