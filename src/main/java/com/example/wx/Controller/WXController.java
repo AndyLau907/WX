@@ -62,6 +62,15 @@ public class WXController {
         out.close();
     }
 
+    @PostMapping("getGifts")
+    public Result getGifts(@RequestBody HashMap map){
+        Result result=new Result();
+        String sql="select *from gift";
+        List<Gift> list=em.createNativeQuery(sql,Gift.class).getResultList();
+        result.setData(list);
+        result.setValid(true);
+        return result;
+    }
     @PostMapping("Login")
     public Result login(@RequestBody HashMap map) {
         String userName = map.get("userName") == null ? "" : map.get("userName").toString();
