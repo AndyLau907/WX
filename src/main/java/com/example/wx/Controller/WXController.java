@@ -103,7 +103,8 @@ public class WXController {
 
     @PostMapping("getSends")
     public Result getSends(@RequestBody HashMap map) {
-        List<GiftsSendModel> list = em.createNativeQuery("select c.id as id,a.user_name as userName,b.gift_name as giftName from user a,gift b,gift_send c where a.id=c.user_id and b.id=c.gift_id", GiftsSendModel.class).getResultList();
+        List<GiftsSendModel> list = em.createNativeQuery("select c.id as id,a.user_name as userName,a.address as address,b.gift_name as giftName " +
+                "from user a,gift b,gift_send c where a.id=c.user_id and b.id=c.gift_id", GiftsSendModel.class).getResultList();
         Result result=new Result();
         result.setValid(true);
         result.setData(list);

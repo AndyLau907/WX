@@ -1,12 +1,19 @@
 package com.example.wx.bean;
 
-import javax.persistence.Entity;
 
-@Entity
 public class GiftsSendModel {
     private String id;
     private String userName;
     private String giftName;
+    private String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public String getId() {
         return id;
