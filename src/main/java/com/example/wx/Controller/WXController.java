@@ -115,7 +115,7 @@ public class WXController {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         Date date = calendar.getTime();
-        List<Sign> list = signRepository.findAllBySignDateAndAndUserId(date, id);
+        List<Sign> list = signRepository.findAllBySignDateAndUserId(date, id);
         if (!list.isEmpty()) {
             result.setMessage("Signed in today, no need to sign again!");
             result.setValid(false);
@@ -133,6 +133,7 @@ public class WXController {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             user.setGold(user.getGold() + 10);
+            userRepository.save(user);
             result.setValid(true);
             result.setData(user);
             result.setMessage("Sign in successfully");
@@ -162,7 +163,7 @@ public class WXController {
             calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.SECOND, 0);
             Date date = calendar.getTime();
-            List<Sign> temp = signRepository.findAllBySignDateAndAndUserId(date, id);
+            List<Sign> temp = signRepository.findAllBySignDateAndUserId(date, id);
             boolean isSigned = !temp.isEmpty();
             HashMap<String, Object> data = new HashMap<>();
             UserData ud=list.get(0);
