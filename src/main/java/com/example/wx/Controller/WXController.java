@@ -7,10 +7,7 @@ import com.example.wx.api.AccessTokenApi;
 import com.example.wx.api.IdAndSecretApi;
 import com.example.wx.bean.*;
 import com.example.wx.handler.DefaultHandler;
-import com.example.wx.repository.SignRepository;
-import com.example.wx.repository.UserDataRepository;
-import com.example.wx.repository.UserRepository;
-import com.example.wx.repository.WxGoodsInfoRepository;
+import com.example.wx.repository.*;
 import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
@@ -38,7 +35,12 @@ public class WXController {
     @Autowired
     UserDataRepository userDataRepository;
     @Autowired
+    GiftSendRepository giftSendRepository;
+    @Autowired
+    GiftRepository giftRepository;
+    @Autowired
     EntityManager em;
+
     @GetMapping(value = "check")
     public String getUserName(@RequestParam(name = "signature") String signature,
                               @RequestParam(name = "timestamp") String timestamp,
@@ -62,15 +64,52 @@ public class WXController {
         out.close();
     }
 
+    @PostMapping("exGifts")
+    public Result exGifts(@RequestBody HashMap map) {
+        Result result = new Result();
+        String id = map.get("userId") == null ? "" : map.get("userId").toString();
+        String giftId = map.get("giftId") == null ? "" : map.get("giftId").toString();
+        List<User> list = userRepository.findAllById(id);
+        GiftSend giftSend = new GiftSend();
+        if (!list.isEmpty()) {
+            User user = list.get(0);
+            String address = user.getAddress();
+            giftSend.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+            giftSend.setAddress(address);
+            giftSend.setGiftId(giftId);
+            giftSend.setUserId(id);
+            giftSendRepository.save(giftSend);
+
+            List<Gift> gifts = giftRepository.findAllById(giftId);
+            if (!gifts.isEmpty()) {
+                user.setGold(user.getGold() - gifts.get(0).getPrice());
+                userRepository.save(user);
+            }
+
+        }
+        result.setValid(true);
+        return result;
+    }
+
     @PostMapping("getGifts")
-    public Result getGifts(@RequestBody HashMap map){
-        Result result=new Result();
-        String sql="select *from gift";
-        List<Gift> list=em.createNativeQuery(sql,Gift.class).getResultList();
+    public Result getGifts(@RequestBody HashMap map) {
+        Result result = new Result();
+        String sql = "select *from gift";
+        List<Gift> list = em.createNativeQuery(sql, Gift.class).getResultList();
         result.setData(list);
         result.setValid(true);
         return result;
     }
+
+    @PostMapping("getSends")
+    public Result getSends(@RequestBody HashMap map) {
+        List<GiftsSendModel> list = em.createNativeQuery("select c.id as id,a.user_name as userName,b.gift_name as giftName from user a,gift b,gift_send c where a.id=c.user_id and b.id=c.gift_id", GiftsSendModel.class).getResultList();
+        Result result=new Result();
+        result.setValid(true);
+        result.setData(list);
+        return  result;
+    }
+
     @PostMapping("Login")
     public Result login(@RequestBody HashMap map) {
         String userName = map.get("userName") == null ? "" : map.get("userName").toString();
@@ -92,6 +131,7 @@ public class WXController {
     public Result register(@RequestBody HashMap map) {
         String userName = map.get("userName") == null ? "" : map.get("userName").toString();
         String password = map.get("password") == null ? "" : map.get("password").toString();
+        String address = map.get("address") == null ? "" : map.get("address").toString();
         String phone = map.get("phone") == null ? "" : map.get("phone").toString();
 
         Result result = new Result();
@@ -105,6 +145,7 @@ public class WXController {
         user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
         user.setPassword(password);
         user.setGold(100);
+        user.setAddress(address);
         user.setPhone(phone);
         user.setUserName(userName);
         userRepository.save(user);
@@ -126,11 +167,11 @@ public class WXController {
         calendar.set(Calendar.HOUR, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
-        int year=calendar.get(Calendar.YEAR);
-        int month=calendar.get(Calendar.MONTH)+1;
-        int day=calendar.get(Calendar.DAY_OF_MONTH);
-        String s=year+"-"+month+"-"+day;
-        List<Sign> list = em.createNativeQuery("select *from sign where user_id='"+id+"' and sign_date='"+s+"'",Sign.class).getResultList();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        String s = year + "-" + month + "-" + day;
+        List<Sign> list = em.createNativeQuery("select *from sign where user_id='" + id + "' and sign_date='" + s + "'", Sign.class).getResultList();
         if (!list.isEmpty()) {
             result.setMessage("Signed in today, no need to sign again!");
             result.setValid(false);
@@ -177,15 +218,15 @@ public class WXController {
             calendar.set(Calendar.HOUR, 0);
             calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.SECOND, 0);
-            int year=calendar.get(Calendar.YEAR);
-            int month=calendar.get(Calendar.MONTH)+1;
-            int day=calendar.get(Calendar.DAY_OF_MONTH);
-            String s=year+"-"+month+"-"+day;
-            List<Sign> temp = em.createNativeQuery("select *from sign where user_id='"+id+"' and sign_date='"+s+"'",Sign.class).getResultList();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            String s = year + "-" + month + "-" + day;
+            List<Sign> temp = em.createNativeQuery("select *from sign where user_id='" + id + "' and sign_date='" + s + "'", Sign.class).getResultList();
             boolean isSigned = !temp.isEmpty();
             HashMap<String, Object> data = new HashMap<>();
-            UserData ud=list.get(0);
-            UserDataViewModel model=new UserDataViewModel();
+            UserData ud = list.get(0);
+            UserDataViewModel model = new UserDataViewModel();
             model.setUserId(ud.getUserId());
             model.setId(ud.getId());
             model.setEndDay(ud.getEndDay());
@@ -209,8 +250,8 @@ public class WXController {
         String startDay = map.get("startDay") == null ? "" : map.get("startDay").toString();
         String endDay = map.get("endDay") == null ? "" : map.get("endDay").toString();
 
-        List<UserData> list=userDataRepository.findAllByIsActiveAndUserId(1,id);
-        if(!list.isEmpty()){
+        List<UserData> list = userDataRepository.findAllByIsActiveAndUserId(1, id);
+        if (!list.isEmpty()) {
             result.setValid(false);
             result.setMessage("You already have a plan, you can't create it again!");
             return result;
