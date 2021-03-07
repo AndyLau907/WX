@@ -17,6 +17,7 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -36,7 +37,6 @@ public class WXController {
     SignRepository signRepository;
     @Autowired
     UserDataRepository userDataRepository;
-
     @GetMapping(value = "check")
     public String getUserName(@RequestParam(name = "signature") String signature,
                               @RequestParam(name = "timestamp") String timestamp,
@@ -103,6 +103,7 @@ public class WXController {
         return result;
     }
 
+
     @PostMapping("Sign")
     public Result sign(@RequestBody HashMap map) {
         Result result = new Result();
@@ -114,8 +115,10 @@ public class WXController {
         calendar.set(Calendar.HOUR, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
-        Date date = calendar.getTime();
-        List<Sign> list = signRepository.findAllBySignDateAndUserId(date, id);
+        int year=calendar.get(Calendar.YEAR);
+        int month=calendar.get(Calendar.MONTH)+1;
+        int day=calendar.get(Calendar.DAY_OF_MONTH);
+        List<Sign> list = signRepository.findAllBySignDateAndUserId(""+year+"-"+month+"-"+day, id);
         if (!list.isEmpty()) {
             result.setMessage("Signed in today, no need to sign again!");
             result.setValid(false);
@@ -125,7 +128,7 @@ public class WXController {
         sign.setId(UUID.randomUUID().toString().replaceAll("-", ""));
         sign.setUserId(id);
         sign.setUserDataId(id2);
-        sign.setSignDate(date);
+        sign.setSignDate(calendar.getTime());
         signRepository.save(sign);
 
         //更新金币
@@ -162,8 +165,10 @@ public class WXController {
             calendar.set(Calendar.HOUR, 0);
             calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.SECOND, 0);
-            Date date = calendar.getTime();
-            List<Sign> temp = signRepository.findAllBySignDateAndUserId(date, id);
+            int year=calendar.get(Calendar.YEAR);
+            int month=calendar.get(Calendar.MONTH)+1;
+            int day=calendar.get(Calendar.DAY_OF_MONTH);
+            List<Sign> temp = signRepository.findAllBySignDateAndUserId(""+year+"-"+month+"-"+day, id);
             boolean isSigned = !temp.isEmpty();
             HashMap<String, Object> data = new HashMap<>();
             UserData ud=list.get(0);

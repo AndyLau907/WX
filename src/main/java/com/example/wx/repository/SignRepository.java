@@ -7,6 +7,6 @@ import java.util.Date;
 import java.util.List;
 
 public interface SignRepository  extends JpaRepository<Sign,String> {
-    List<Sign> findAllBySignDateAndUserId(Date signDate,String userId);
+    List<Sign> findAllBySignDateAndUserId(String signDate,String userId);
     List<Sign> findAllByUserDataId(String userDataId);
 }
