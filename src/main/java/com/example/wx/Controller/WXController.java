@@ -206,7 +206,16 @@ public class WXController {
         if (list.isEmpty()) {
             result.setValid(false);
         } else {
-            List<Sign> signList = signRepository.findAllByUserDataId(list.get(0).getId());
+            //
+            UserData userData=list.get(0);
+            if(userData.getEndDay().before(new Date())){
+                userData.setIsActive(0);
+                userDataRepository.save(userData);
+                result.setValid(false);
+                return result;
+            }
+            //
+            List<Sign> signList = signRepository.findAllByUserDataId(userData.getId());
             List<String> signDates = new ArrayList<>();
             for (Sign sign : signList) {
                 Date d = sign.getSignDate();
